@@ -258,7 +258,7 @@ zinit wait lucid for \
 
 
 # LS Color support in Shell
-. "/home/faisal/.local/share/lscolors.sh"
+. " $HOME/.local/share/lscolors.sh"
 
 # Install Powerlevel10k
 zinit ice depth=1; zinit light romkatv/powerlevel10k
