@@ -30,4 +30,4 @@
 
 - name: Copy my .zshrc
   command: curl -LSso ~/.zshrc https://raw.github.com/fhumayun/dotfiles/master/.zshrc 
-  sudo: no
+
