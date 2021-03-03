@@ -1,11 +1,9 @@
-- name: Install zsh (with dependencies)
+- name: Installs zsh | apt
+  become: yes
+  become_user: root
   apt:
-    name={{ item }}
-    state=present
-    update_cache=yes
-  with_items: dependencies
-  sudo: yes
-  when: ansible_os_family == "Debian"
+    name: zsh
+    state: present
 
 - name: Installs curl 
   become: yes
@@ -53,7 +51,3 @@
 - name: Get zsh path
   command: which zsh 
   register: zsh_path
-
-- name: Switch to zsh
-  user: name={{ansible_ssh_user}} shell={{ zsh_path.stdout }}
-  sudo: yes 
