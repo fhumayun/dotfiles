@@ -13,7 +13,6 @@
     state: present
 
 - name: set up zsh for user
-  hosts: localhost
   become: no
   vars:
     the_user: "{{ ansible_user_id }}"
