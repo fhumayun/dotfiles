@@ -30,6 +30,10 @@
 
 - name: Copy my .zshrc
   get_url:
-    url: https://raw.github.com/fhumayun/dotfiles/master/.zshrc 
+    url: https://github.com/fhumayun/dotfiles/master/roles/zsh/files/zshrc
     dest: ~/.zshrc 
 
+- name: Copy my .zshenv
+  get_url:
+    url: https://github.com/fhumayun/dotfiles/raw/master/roles/zsh/files/zshenv
+    dest: ~/.zshenv
