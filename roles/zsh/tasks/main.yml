@@ -1,11 +1,11 @@
-- name: Installs zsh | apt
+- name: Installs zsh 
   become: yes
   become_user: root
   apt:
     name: zsh
     state: present
 
-- name: Installs curl | apt
+- name: Installs curl 
   become: yes
   become_user: root
   apt:
@@ -23,16 +23,16 @@
         name: "{{ the_user }}"
         shell: /bin/zsh
 
-- name: Checks for zinit installation | stat
+- name: Checks for zinit installation 
   stat:
     path: "{{ lookup('env', 'HOME') }}/.zinit"
   register: zinit_stat
 
-- name: Installs zinit | raw
+- name: Installs zinit 
   raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"' 
   when: not zinit_stat.stat.exists
 
-- name: Links .zshrc file | file
+- name: Links .zshrc file 
   file:
     src: "{{ lookup('env', 'ROOTDIR') }}/roles/zsh/files/zshrc.link"
     dest: "{{ lookup('env', 'HOME') }}/.zshrc"
