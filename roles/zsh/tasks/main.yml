@@ -1,5 +1,3 @@
----
-# file: roles/zsh/tasks/main.yml
 - name: Installs zsh | apt
   become: yes
   become_user: root
