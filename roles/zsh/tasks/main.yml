@@ -18,7 +18,7 @@
 - name: Sets zsh as default shell for my user | command
   become: yes
   become_user: root
-  command: chsh -s /bin/zsh {{ lookup('env' 'USER') }}
+  command: chsh -s /bin/zsh {{ lookup('env', 'USER') }}
   args:
     executable: /bin/bash
     ignore_errors: true # ignore chsh PAM auth error
