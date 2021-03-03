@@ -1,9 +1,11 @@
-- name: Installs zsh 
-  become: yes
-  become_user: root
+- name: Install zsh (with dependencies)
   apt:
-    name: zsh
-    state: present
+    name={{ item }}
+    state=present
+    update_cache=yes
+  with_items: dependencies
+  sudo: yes
+  when: ansible_os_family == "Debian"
 
 - name: Installs curl 
   become: yes
@@ -32,9 +34,26 @@
   raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"' 
   when: not zinit_stat.stat.exists
 
-- name: Links .zshrc file 
-  file:
-    src: "{{ lookup('env', 'ROOTDIR') }}/roles/zsh/files/zshrc.link"
-    dest: "{{ lookup('env', 'HOME') }}/.zshrc"
-    state: link
-    force: yes
+- name: Back up existing ~/.zshrc
+  shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc ~/.zshrc.bak ; fi
+  sudo: no 
+
+- name: Back up existing ~/.zsh_aliases
+  shell: if [ -f ~/.zsh_aliases ]; then mv ~/.zsh_aliases ~/.zsh_aliases.bak ; fi
+  sudo: no 
+
+- name: Copy my .zshrc
+  command: curl -LSso ~/.zshrc https://raw.github.com/ChengLong/configs/master/.zshrc 
+  sudo: no
+
+- name: Copy my .zsh_aliases 
+  command: curl -LSso ~/.zsh_aliases https://raw.github.com/ChengLong/configs/master/.zsh_aliases 
+  sudo: no
+
+- name: Get zsh path
+  command: which zsh 
+  register: zsh_path
+
+- name: Switch to zsh
+  user: name={{ansible_ssh_user}} shell={{ zsh_path.stdout }}
+  sudo: yes 
