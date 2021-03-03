@@ -29,5 +29,7 @@
   when: not zinit_stat.stat.exists
 
 - name: Copy my .zshrc
-  command: curl -LSso ~/.zshrc https://raw.github.com/fhumayun/dotfiles/master/.zshrc 
+  get_url:
+    url: https://raw.github.com/fhumayun/dotfiles/master/.zshrc 
+    dest: ~/.zshrc 
 
