@@ -1,27 +1,23 @@
-- name: Installs zsh | apt
+- name: Installs zsh
   become: yes
   become_user: root
   apt:
-    name: zsh
+    name: 
+    - zsh
     state: present
 
 - name: Installs curl 
   become: yes
   become_user: root
   apt:
-    name: curl
+    name: 
+    - curl
     state: present
 
 - name: set up zsh for user
-  become: no
-  vars:
-    the_user: "{{ ansible_user_id }}"
-  tasks:
-    - name: change user shell to zsh 
-      become: yes
-      user:
-        name: "{{ the_user }}"
-        shell: /bin/zsh
+  become: yes
+  become_user: root
+  command: chsh -s /bin/zsh {{ lookup('env', 'USER') }}
 
 - name: Checks for zinit installation 
   stat:
@@ -32,22 +28,9 @@
   raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"' 
   when: not zinit_stat.stat.exists
 
-- name: Back up existing ~/.zshrc
-  shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc ~/.zshrc.bak ; fi
-  sudo: no 
-
-- name: Back up existing ~/.zsh_aliases
-  shell: if [ -f ~/.zsh_aliases ]; then mv ~/.zsh_aliases ~/.zsh_aliases.bak ; fi
-  sudo: no 
-
-- name: Copy my .zshrc
-  command: curl -LSso ~/.zshrc https://raw.github.com/ChengLong/configs/master/.zshrc 
-  sudo: no
-
-- name: Copy my .zsh_aliases 
-  command: curl -LSso ~/.zsh_aliases https://raw.github.com/ChengLong/configs/master/.zsh_aliases 
-  sudo: no
-
-- name: Get zsh path
-  command: which zsh 
-  register: zsh_path
+- name: Links .zshrc file | file
+  file:
+    src: "{{ lookup('env', 'ROOTDIR') }}/roles/zsh/files/zshrc.link"
+    dest: "{{ lookup('env', 'HOME') }}/.zshrc"
+    state: link
+    force: yes
