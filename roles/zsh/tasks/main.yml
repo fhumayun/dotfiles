@@ -44,7 +44,7 @@
 
 - debug:
     msg: "Path exists and is a symlink"
-  when: zshrc_stat.stat.islnk is defined
+  when: zshrc_stat.stat.islnk is defined and zshrc_stat.stat.islnk
 
 - name: Copy my .zshenv
   get_url:
@@ -62,4 +62,4 @@
 
 - debug:
     msg: "Path exists and is a symlink"
-  when: zshenv_stat.stat.islnk is defined
+  when: zshenv_stat.stat.islnk is defined and zshenv_stat.stat.islnk
