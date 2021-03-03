@@ -33,7 +33,33 @@
     url: https://github.com/fhumayun/dotfiles/raw/master/roles/zsh/files/zshrc
     dest: ~/.zshrc 
 
+- name: Checks if zshrc is installed
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.zshrc"
+  register: zshrc_stat
+
+- fail:
+    msg: "Whoops! zshrc symlink not found"
+  when: zshrc_stat.stat.islnk is not defined
+
+- debug:
+    msg: "Path exists and is a symlink"
+  when: zshrc_stat.stat.islnk is defined
+
 - name: Copy my .zshenv
   get_url:
     url: https://github.com/fhumayun/dotfiles/raw/master/roles/zsh/files/zshenv
     dest: ~/.zshenv
+
+- name: Checks if zshenv is installed
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.zshenv"
+  register: zshenv_stat
+
+- fail:
+    msg: "Whoops! zshrc symlink not found"
+  when: zshenv_stat.stat.islnk is not defined
+
+- debug:
+    msg: "Path exists and is a symlink"
+  when: zshenv_stat.stat.islnk is defined
