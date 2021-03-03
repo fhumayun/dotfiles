@@ -19,6 +19,9 @@
   become: yes
   become_user: root
   command: chsh -s /bin/zsh {{ lookup('env' 'USER') }}
+  args:
+  executable: /bin/bash
+  ignore_errors: true # ignore chsh PAM auth error
   register: zsh_for_user
   failed_when: zsh_for_user.rc >= 1
   changed_when: zsh_for_user.rc == 0
